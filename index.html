@@ -1,0 +1,492 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diabetes Readmission Analytics Dashboard</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #627083;
+      --line: #d7dde5;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --teal: #0f766e;
+      --amber: #b45309;
+      --red: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.45;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      padding: 28px 36px 24px;
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+    header p {
+      margin: 0;
+      max-width: 980px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    main {
+      padding: 24px 36px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    section {
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .panel, .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .metric .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metric .value {
+      font-size: 27px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .metric .note {
+      color: var(--muted);
+      margin-top: 5px;
+      font-size: 13px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 62px;
+      align-items: center;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+    .bar-row:last-child { border-bottom: 0; }
+    .bar-label strong {
+      display: block;
+      font-size: 13px;
+    }
+    .bar-label span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .bar-track {
+      height: 12px;
+      background: #e9eef5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 12px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+    }
+    .bar-value {
+      text-align: right;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid #edf1f5;
+      padding: 8px 6px;
+      text-align: left;
+    }
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: #eef5ff;
+      padding: 14px 16px;
+      border-radius: 8px;
+      color: #22324a;
+    }
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+    .model-box {
+      background: #f8fafc;
+      border: 1px solid #e4e9f0;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .model-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .model-box strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 21px;
+    }
+    footer {
+      color: var(--muted);
+      font-size: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .tip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      margin-left: 5px;
+      border-radius: 50%;
+      border: 1px solid #9aa6b8;
+      color: #526071;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+      vertical-align: middle;
+      background: #ffffff;
+    }
+    .tip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      top: 22px;
+      width: 260px;
+      background: #101828;
+      color: #ffffff;
+      padding: 9px 10px;
+      border-radius: 7px;
+      font-size: 12px;
+      line-height: 1.35;
+      z-index: 30;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
+    }
+    @media (max-width: 920px) {
+      header, main { padding-left: 18px; padding-right: 18px; }
+      .grid, .two, .model-grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 130px 1fr 54px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Diabetes Readmission Analytics Dashboard</h1>
+    <p>Portfolio project using real clinical encounter data from 130 U.S. hospitals. The dashboard summarizes readmission patterns, data quality, care utilization indicators, and a baseline predictive model for 30-day readmission risk.</p>
+  </header>
+  <main>
+    <section class="grid">
+      <div class="metric"><div class="label">Hospital Encounters <span class="tip" data-tip="One row represents one inpatient hospital encounter for a diabetes patient, not one unique person.">?</span></div><div class="value">101,766</div><div class="note">1999-2008 diabetes inpatient records</div></div>
+      <div class="metric"><div class="label">Unique Patients <span class="tip" data-tip="The number of distinct patient IDs. A patient can have more than one hospital encounter.">?</span></div><div class="value">71,518</div><div class="note">Longitudinal patient-level records</div></div>
+      <div class="metric"><div class="label">30-Day Readmission <span class="tip" data-tip="A patient returned to the hospital within 30 days after discharge. This is a common healthcare quality metric.">?</span></div><div class="value">11.2%</div><div class="note">11,357 encounters readmitted within 30 days</div></div>
+      <div class="metric"><div class="label">Average Length of Stay <span class="tip" data-tip="Average number of days a patient stayed in the hospital during an encounter.">?</span></div><div class="value">4.4</div><div class="note">days per encounter</div></div>
+    </section>
+
+    <section class="two">
+      <div class="panel">
+        <h2>Readmission Rate by Age Group <span class="tip" data-tip="Compares how often patients in each age band were readmitted within 30 days.">?</span></h2>
+        
+            <div class="bar-row">
+              <div class="bar-label"><strong>[20-30)</strong><span>1,657 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div>
+              <div class="bar-value">14.2%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[80-90)</strong><span>17,197 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:85.2%"></div></div>
+              <div class="bar-value">12.1%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[70-80)</strong><span>26,068 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:83.1%"></div></div>
+              <div class="bar-value">11.8%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[30-40)</strong><span>3,775 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:78.9%"></div></div>
+              <div class="bar-value">11.2%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[60-70)</strong><span>22,483 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:78.2%"></div></div>
+              <div class="bar-value">11.1%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[90-100)</strong><span>2,793 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:78.2%"></div></div>
+              <div class="bar-value">11.1%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[40-50)</strong><span>9,685 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:74.6%"></div></div>
+              <div class="bar-value">10.6%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[50-60)</strong><span>17,256 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:68.3%"></div></div>
+              <div class="bar-value">9.7%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[10-20)</strong><span>691 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:40.8%"></div></div>
+              <div class="bar-value">5.8%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>[0-10)</strong><span>161 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:13.4%"></div></div>
+              <div class="bar-value">1.9%</div>
+            </div>
+            
+      </div>
+      <div class="panel">
+        <h2>Readmission Rate by A1C Result <span class="tip" data-tip="A1C is a blood sugar control marker. This chart compares readmission rates by A1C test result category.">?</span></h2>
+        
+            <div class="bar-row">
+              <div class="bar-label"><strong>None</strong><span>84,748 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div>
+              <div class="bar-value">11.4%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>>7</strong><span>3,812 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:87.7%"></div></div>
+              <div class="bar-value">10.0%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>>8</strong><span>8,216 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:86.8%"></div></div>
+              <div class="bar-value">9.9%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>Norm</strong><span>4,990 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:85.1%"></div></div>
+              <div class="bar-value">9.7%</div>
+            </div>
+            
+      </div>
+    </section>
+
+    <section class="two">
+      <div class="panel">
+        <h2>Insulin Medication Segment <span class="tip" data-tip="Shows whether readmission patterns differ by insulin medication status, such as no insulin, steady dosage, up, or down.">?</span></h2>
+        
+            <div class="bar-row">
+              <div class="bar-label"><strong>Down</strong><span>12,218 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div>
+              <div class="bar-value">13.9%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>Up</strong><span>11,316 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:93.5%"></div></div>
+              <div class="bar-value">13.0%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>Steady</strong><span>30,849 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:79.9%"></div></div>
+              <div class="bar-value">11.1%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>No</strong><span>47,383 encounters</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:71.9%"></div></div>
+              <div class="bar-value">10.0%</div>
+            </div>
+            
+      </div>
+      <div class="panel">
+        <h2>Length of Stay Distribution <span class="tip" data-tip="Shows how encounters are distributed by hospital stay duration buckets.">?</span></h2>
+        
+            <div class="bar-row">
+              <div class="bar-label"><strong>3-5 days</strong><span>41,646 records</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div>
+              <div class="bar-value">40.9%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>1-2 days</strong><span>31,432 records</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:75.6%"></div></div>
+              <div class="bar-value">30.9%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>6-8 days</strong><span>17,789 records</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:42.8%"></div></div>
+              <div class="bar-value">17.5%</div>
+            </div>
+            
+
+            <div class="bar-row">
+              <div class="bar-label"><strong>9-14 days</strong><span>10,899 records</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:26.2%"></div></div>
+              <div class="bar-value">10.7%</div>
+            </div>
+            
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Prediction Demo: 30-Day Readmission Risk <span class="tip" data-tip="This section estimates the chance that a patient encounter may be followed by readmission within 30 days.">?</span></h2>
+      <div class="callout"><strong>What is being predicted?</strong> <span class="tip" data-tip="The target variable is readmitted <30, meaning the patient came back to the hospital in less than 30 days.">?</span> For each diabetes inpatient encounter, the model estimates whether the patient may be readmitted to the hospital within 30 days after discharge. This is a portfolio baseline model, not a clinical decision tool.</div>
+      <div style="display:grid;grid-template-columns:0.95fr 1.05fr;gap:16px;margin-top:14px;">
+        <div style="background:#f8fafc;border:1px solid #e4e9f0;border-radius:8px;padding:16px;">
+          <h3 style="margin:0 0 8px;font-size:16px;">Try a Simple Risk Scenario</h3>
+          <div style="color:#627083;font-size:13px;">Move the controls to see how patient utilization signals change the estimated risk.</div>
+          <div style="font-size:44px;font-weight:800;margin:8px 0 2px;color:#2563eb;" id="riskPct">--%</div>
+          <div id="riskBand" style="display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;background:#e0f2fe;color:#075985;">Risk band</div>
+          <div style="margin-top:14px;">
+            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Prior inpatient visits <input id="inpatientCtrl" type="range" min="0" max="10" value="1"><span id="inpatientVal">1</span></label>
+            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Emergency visits <input id="emergencyCtrl" type="range" min="0" max="10" value="0"><span id="emergencyVal">0</span></label>
+            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Number of diagnoses <input id="diagnosesCtrl" type="range" min="1" max="16" value="6"><span id="diagnosesVal">6</span></label>
+            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Length of stay <input id="losCtrl" type="range" min="1" max="14" value="4"><span id="losVal">4</span></label>
+            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Age midpoint <input id="ageCtrl" type="range" min="10" max="95" value="65"><span id="ageVal">65</span></label>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin:0 0 8px;font-size:16px;">Where the prediction appears in this dashboard</h3>
+          <ul style="margin:8px 0 14px;padding-left:18px;color:#334155;font-size:14px;line-height:1.55;">
+            <li><strong>Target:</strong> readmitted within 30 days, shown as the prediction outcome.</li>
+            <li><strong>Model metrics:</strong> AUC, precision, recall, and F1 summarize prediction performance.</li>
+            <li><strong>Model signals:</strong> prior inpatient visits, number of diagnoses, emergency visits, age, and length of stay are examples of features that move risk up or down.</li>
+          </ul>
+          <div class="model-grid">
+            <div class="model-box"><span>AUC <span class="tip" data-tip="AUC measures how well the model separates readmitted vs not-readmitted cases. 0.5 is random; 1.0 is perfect.">?</span></span><strong>0.613</strong></div>
+            <div class="model-box"><span>Accuracy <span class="tip" data-tip="Share of correct predictions overall. It can look high when the positive event is uncommon, so it should not be read alone.">?</span></span><strong>0.876</strong></div>
+            <div class="model-box"><span>Precision <span class="tip" data-tip="Of the cases the model flagged as high risk, this is the share that actually had a 30-day readmission.">?</span></span><strong>0.292</strong></div>
+            <div class="model-box"><span>Recall <span class="tip" data-tip="Of all actual 30-day readmissions, this is the share the model successfully caught.">?</span></span><strong>0.071</strong></div>
+            <div class="model-box"><span>F1 <span class="tip" data-tip="A combined score balancing precision and recall. Useful when the positive event is relatively rare.">?</span></span><strong>0.114</strong></div>
+          </div>
+          <table>
+            <thead><tr><th>Top Risk Signal <span class="tip" data-tip="A feature used by the model to estimate readmission risk.">?</span></th><th>Weight <span class="tip" data-tip="Positive weights push estimated risk higher; negative weights push it lower. Larger absolute values have stronger impact.">?</span></th><th>Plain-English Meaning</th></tr></thead>
+            <tbody><tr><td>Prior inpatient visits</td><td>2.203</td><td>More recent inpatient history pushes risk higher.</td></tr>
+<tr><td>Number of diagnoses</td><td>0.606</td><td>More documented conditions can indicate higher complexity.</td></tr>
+<tr><td>Emergency visits</td><td>0.362</td><td>More emergency utilization pushes risk higher.</td></tr>
+<tr><td>Age midpoint</td><td>0.350</td><td>Older age groups trend toward higher risk in this baseline.</td></tr>
+<tr><td>Length of stay</td><td>0.297</td><td>Longer stays can signal greater clinical complexity.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="two">
+      <div class="panel">
+        <h2>Data Quality Checks</h2>
+        <table>
+          <thead><tr><th>Field</th><th>Missing Records</th><th>Missing Rate</th></tr></thead>
+          <tbody>
+            <tr><td>weight</td><td>98,569</td><td>96.9%</td></tr><tr><td>medical_specialty</td><td>49,949</td><td>49.1%</td></tr><tr><td>payer_code</td><td>40,256</td><td>39.6%</td></tr><tr><td>race</td><td>2,273</td><td>2.2%</td></tr><tr><td>diag_3</td><td>1,423</td><td>1.4%</td></tr><tr><td>diag_2</td><td>358</td><td>0.4%</td></tr><tr><td>diag_1</td><td>21</td><td>0.0%</td></tr><tr><td>gender</td><td>3</td><td>0.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h2>Project Value</h2>
+        <p>This project demonstrates the full healthcare analytics workflow: data profiling, KPI design, cohort segmentation, dashboard reporting, data quality review, and a predictive modeling baseline.</p>
+        <p>It is designed for Healthcare Data Analyst, Clinical BI Analyst, Quality Reporting Analyst, and entry-level Population Health Analytics applications.</p>
+      </div>
+    </section>
+
+    <footer>
+      Data source: UCI Machine Learning Repository - Diabetes 130-US Hospitals for Years 1999-2008. Dataset page: https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008. License: Creative Commons Attribution 4.0 International (CC BY 4.0).
+    </footer>
+  </main>
+<script>
+(function(){
+  const ids = ['inpatient','emergency','diagnoses','los','age'];
+  function sigmoid(x){ return 1 / (1 + Math.exp(-x)); }
+  function updateRisk(){
+    const inpatient = Number(document.getElementById('inpatientCtrl').value);
+    const emergency = Number(document.getElementById('emergencyCtrl').value);
+    const diagnoses = Number(document.getElementById('diagnosesCtrl').value);
+    const los = Number(document.getElementById('losCtrl').value);
+    const age = Number(document.getElementById('ageCtrl').value);
+    document.getElementById('inpatientVal').textContent = inpatient;
+    document.getElementById('emergencyVal').textContent = emergency;
+    document.getElementById('diagnosesVal').textContent = diagnoses;
+    document.getElementById('losVal').textContent = los;
+    document.getElementById('ageVal').textContent = age;
+    const score = -2.45 + 2.203*(Math.min(inpatient,10)/10) + 0.362*(Math.min(emergency,10)/10) + 0.606*(diagnoses/16) + 0.297*(los/14) + 0.35*(age/100);
+    const risk = sigmoid(score);
+    const pct = Math.round(risk * 1000) / 10;
+    const band = document.getElementById('riskBand');
+    document.getElementById('riskPct').textContent = pct + '%';
+    if (pct >= 18) { band.textContent = 'Higher estimated risk'; band.style.background = '#fee2e2'; band.style.color = '#991b1b'; }
+    else if (pct >= 11) { band.textContent = 'Moderate estimated risk'; band.style.background = '#fef3c7'; band.style.color = '#92400e'; }
+    else { band.textContent = 'Lower estimated risk'; band.style.background = '#dcfce7'; band.style.color = '#166534'; }
+  }
+  ids.forEach(id => document.getElementById(id+'Ctrl').addEventListener('input', updateRisk));
+  updateRisk();
+})();
+</script>
+</body>
+</html>
+
+

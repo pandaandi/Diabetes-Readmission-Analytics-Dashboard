@@ -1,0 +1,36 @@
+Healthcare Analytics Portfolio Brief
+
+Project: Diabetes Readmission Analytics Dashboard
+
+Target role fit:
+Healthcare Data Analyst | Clinical BI Analyst | Quality Reporting Analyst | Population Health Analytics Associate
+
+Dataset:
+UCI Diabetes 130-US Hospitals for Years 1999-2008
+https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008
+
+Portfolio narrative:
+This project analyzes real inpatient diabetes encounter data from 130 U.S. hospitals to identify patterns associated with 30-day readmission. It demonstrates a practical healthcare analytics workflow: data profiling, KPI development, cohort analysis, dashboard reporting, data quality checks, and a baseline predictive model.
+
+Why this fits my background:
+- RBT experience: clinical documentation, client-level progress tracking, behavioral health data accuracy
+- Dialysis-X: healthcare market analytics, patient population analysis, KPI dashboard thinking
+- Miaomi: patient-related data cleaning, feature engineering, predictive modeling
+- SQL/eBay project: structured analysis, segmentation, A/B testing, business recommendations
+
+Main metrics:
+- Encounters: 101,766
+- Unique patients: 71,518
+- 30-day readmission rate: 11.2%
+- Average length of stay: 4.4 days
+- Baseline model AUC: 0.613
+
+Suggested resume project entry:
+
+Diabetes Readmission Analytics Dashboard | Healthcare BI & Predictive Analytics Project
+- Built a healthcare analytics dashboard using 101K+ diabetes inpatient encounters from 130 U.S. hospitals to analyze 30-day readmission patterns, patient cohorts, care utilization, and data quality.
+- Created KPI views for readmission rate, length of stay, A1C result, insulin medication status, and missing-data checks to support clinical reporting and quality analytics.
+- Developed a baseline Python predictive model for 30-day readmission risk, using feature engineering and logistic regression to evaluate model performance and identify high-risk signals.
+
+Short interview answer:
+I chose a diabetes readmission project because readmission is a common healthcare quality and population health use case. I used real hospital encounter data, profiled data quality, built readmission KPIs, segmented patient cohorts, and added a baseline predictive model. It helped me connect my clinical documentation experience as an RBT with healthcare analytics skills like SQL-style data modeling, BI reporting, and predictive analytics.

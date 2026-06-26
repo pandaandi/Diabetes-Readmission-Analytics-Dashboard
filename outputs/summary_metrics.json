@@ -1,0 +1,516 @@
+{
+  "project_title": "Diabetes Readmission Analytics Dashboard",
+  "data_source": "UCI Machine Learning Repository - Diabetes 130-US Hospitals for Years 1999-2008",
+  "source_url": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008",
+  "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "kpis": {
+    "encounters": 101766,
+    "unique_patients": 71518,
+    "features": 50,
+    "readmitted_within_30_days": 11357,
+    "readmitted_within_30_days_rate": 11.2,
+    "any_readmission_rate": 46.1,
+    "avg_time_in_hospital": 4.4,
+    "avg_lab_procedures": 43.1,
+    "avg_medications": 16.02
+  },
+  "distributions": {
+    "readmission": [
+      {
+        "name": "NO",
+        "count": 54864,
+        "pct": 53.9
+      },
+      {
+        "name": ">30",
+        "count": 35545,
+        "pct": 34.9
+      },
+      {
+        "name": "<30",
+        "count": 11357,
+        "pct": 11.2
+      }
+    ],
+    "age": [
+      {
+        "name": "[70-80)",
+        "count": 26068,
+        "pct": 25.6
+      },
+      {
+        "name": "[60-70)",
+        "count": 22483,
+        "pct": 22.1
+      },
+      {
+        "name": "[50-60)",
+        "count": 17256,
+        "pct": 17.0
+      },
+      {
+        "name": "[80-90)",
+        "count": 17197,
+        "pct": 16.9
+      },
+      {
+        "name": "[40-50)",
+        "count": 9685,
+        "pct": 9.5
+      },
+      {
+        "name": "[30-40)",
+        "count": 3775,
+        "pct": 3.7
+      },
+      {
+        "name": "[90-100)",
+        "count": 2793,
+        "pct": 2.7
+      },
+      {
+        "name": "[20-30)",
+        "count": 1657,
+        "pct": 1.6
+      },
+      {
+        "name": "[10-20)",
+        "count": 691,
+        "pct": 0.7
+      },
+      {
+        "name": "[0-10)",
+        "count": 161,
+        "pct": 0.2
+      }
+    ],
+    "race": [
+      {
+        "name": "Caucasian",
+        "count": 76099,
+        "pct": 74.8
+      },
+      {
+        "name": "AfricanAmerican",
+        "count": 19210,
+        "pct": 18.9
+      },
+      {
+        "name": "Missing",
+        "count": 2273,
+        "pct": 2.2
+      },
+      {
+        "name": "Hispanic",
+        "count": 2037,
+        "pct": 2.0
+      },
+      {
+        "name": "Other",
+        "count": 1506,
+        "pct": 1.5
+      },
+      {
+        "name": "Asian",
+        "count": 641,
+        "pct": 0.6
+      }
+    ],
+    "A1Cresult": [
+      {
+        "name": "None",
+        "count": 84748,
+        "pct": 83.3
+      },
+      {
+        "name": ">8",
+        "count": 8216,
+        "pct": 8.1
+      },
+      {
+        "name": "Norm",
+        "count": 4990,
+        "pct": 4.9
+      },
+      {
+        "name": ">7",
+        "count": 3812,
+        "pct": 3.7
+      }
+    ],
+    "insulin": [
+      {
+        "name": "No",
+        "count": 47383,
+        "pct": 46.6
+      },
+      {
+        "name": "Steady",
+        "count": 30849,
+        "pct": 30.3
+      },
+      {
+        "name": "Down",
+        "count": 12218,
+        "pct": 12.0
+      },
+      {
+        "name": "Up",
+        "count": 11316,
+        "pct": 11.1
+      }
+    ],
+    "length_of_stay_bucket": [
+      {
+        "name": "3-5 days",
+        "count": 41646,
+        "pct": 40.9
+      },
+      {
+        "name": "1-2 days",
+        "count": 31432,
+        "pct": 30.9
+      },
+      {
+        "name": "6-8 days",
+        "count": 17789,
+        "pct": 17.5
+      },
+      {
+        "name": "9-14 days",
+        "count": 10899,
+        "pct": 10.7
+      }
+    ]
+  },
+  "grouped_readmission_rates": {
+    "age": [
+      {
+        "name": "[20-30)",
+        "encounters": 1657,
+        "readmit_lt30": 236,
+        "rate": 14.2
+      },
+      {
+        "name": "[80-90)",
+        "encounters": 17197,
+        "readmit_lt30": 2078,
+        "rate": 12.1
+      },
+      {
+        "name": "[70-80)",
+        "encounters": 26068,
+        "readmit_lt30": 3069,
+        "rate": 11.8
+      },
+      {
+        "name": "[30-40)",
+        "encounters": 3775,
+        "readmit_lt30": 424,
+        "rate": 11.2
+      },
+      {
+        "name": "[60-70)",
+        "encounters": 22483,
+        "readmit_lt30": 2502,
+        "rate": 11.1
+      },
+      {
+        "name": "[90-100)",
+        "encounters": 2793,
+        "readmit_lt30": 310,
+        "rate": 11.1
+      },
+      {
+        "name": "[40-50)",
+        "encounters": 9685,
+        "readmit_lt30": 1027,
+        "rate": 10.6
+      },
+      {
+        "name": "[50-60)",
+        "encounters": 17256,
+        "readmit_lt30": 1668,
+        "rate": 9.7
+      },
+      {
+        "name": "[10-20)",
+        "encounters": 691,
+        "readmit_lt30": 40,
+        "rate": 5.8
+      },
+      {
+        "name": "[0-10)",
+        "encounters": 161,
+        "readmit_lt30": 3,
+        "rate": 1.9
+      }
+    ],
+    "race": [
+      {
+        "name": "Caucasian",
+        "encounters": 76099,
+        "readmit_lt30": 8592,
+        "rate": 11.3
+      },
+      {
+        "name": "AfricanAmerican",
+        "encounters": 19210,
+        "readmit_lt30": 2155,
+        "rate": 11.2
+      },
+      {
+        "name": "Hispanic",
+        "encounters": 2037,
+        "readmit_lt30": 212,
+        "rate": 10.4
+      },
+      {
+        "name": "Asian",
+        "encounters": 641,
+        "readmit_lt30": 65,
+        "rate": 10.1
+      },
+      {
+        "name": "Other",
+        "encounters": 1506,
+        "readmit_lt30": 145,
+        "rate": 9.6
+      },
+      {
+        "name": "Missing",
+        "encounters": 2273,
+        "readmit_lt30": 188,
+        "rate": 8.3
+      }
+    ],
+    "A1Cresult": [
+      {
+        "name": "None",
+        "encounters": 84748,
+        "readmit_lt30": 9681,
+        "rate": 11.4
+      },
+      {
+        "name": ">7",
+        "encounters": 3812,
+        "readmit_lt30": 383,
+        "rate": 10.0
+      },
+      {
+        "name": ">8",
+        "encounters": 8216,
+        "readmit_lt30": 811,
+        "rate": 9.9
+      },
+      {
+        "name": "Norm",
+        "encounters": 4990,
+        "readmit_lt30": 482,
+        "rate": 9.7
+      }
+    ],
+    "insulin": [
+      {
+        "name": "Down",
+        "encounters": 12218,
+        "readmit_lt30": 1698,
+        "rate": 13.9
+      },
+      {
+        "name": "Up",
+        "encounters": 11316,
+        "readmit_lt30": 1470,
+        "rate": 13.0
+      },
+      {
+        "name": "Steady",
+        "encounters": 30849,
+        "readmit_lt30": 3433,
+        "rate": 11.1
+      },
+      {
+        "name": "No",
+        "encounters": 47383,
+        "readmit_lt30": 4756,
+        "rate": 10.0
+      }
+    ],
+    "medical_specialty_top": [
+      {
+        "name": "Resident",
+        "encounters": 2,
+        "readmit_lt30": 1,
+        "rate": 50.0
+      },
+      {
+        "name": "AllergyandImmunology",
+        "encounters": 7,
+        "readmit_lt30": 3,
+        "rate": 42.9
+      },
+      {
+        "name": "Hematology",
+        "encounters": 82,
+        "readmit_lt30": 26,
+        "rate": 31.7
+      },
+      {
+        "name": "Pediatrics-Hematology-Oncology",
+        "encounters": 4,
+        "readmit_lt30": 1,
+        "rate": 25.0
+      },
+      {
+        "name": "InfectiousDiseases",
+        "encounters": 37,
+        "readmit_lt30": 8,
+        "rate": 21.6
+      },
+      {
+        "name": "Hematology/Oncology",
+        "encounters": 207,
+        "readmit_lt30": 40,
+        "rate": 19.3
+      },
+      {
+        "name": "Oncology",
+        "encounters": 348,
+        "readmit_lt30": 66,
+        "rate": 19.0
+      },
+      {
+        "name": "PhysicianNotFound",
+        "encounters": 11,
+        "readmit_lt30": 2,
+        "rate": 18.2
+      },
+      {
+        "name": "Rheumatology",
+        "encounters": 17,
+        "readmit_lt30": 3,
+        "rate": 17.6
+      },
+      {
+        "name": "Surgery-Plastic",
+        "encounters": 41,
+        "readmit_lt30": 7,
+        "rate": 17.1
+      },
+      {
+        "name": "Nephrology",
+        "encounters": 1613,
+        "readmit_lt30": 248,
+        "rate": 15.4
+      },
+      {
+        "name": "PhysicalMedicineandRehabilitation",
+        "encounters": 391,
+        "readmit_lt30": 60,
+        "rate": 15.3
+      }
+    ]
+  },
+  "data_quality": [
+    {
+      "field": "weight",
+      "missing_count": 98569,
+      "missing_rate": 96.9
+    },
+    {
+      "field": "medical_specialty",
+      "missing_count": 49949,
+      "missing_rate": 49.1
+    },
+    {
+      "field": "payer_code",
+      "missing_count": 40256,
+      "missing_rate": 39.6
+    },
+    {
+      "field": "race",
+      "missing_count": 2273,
+      "missing_rate": 2.2
+    },
+    {
+      "field": "diag_3",
+      "missing_count": 1423,
+      "missing_rate": 1.4
+    },
+    {
+      "field": "diag_2",
+      "missing_count": 358,
+      "missing_rate": 0.4
+    },
+    {
+      "field": "diag_1",
+      "missing_count": 21,
+      "missing_rate": 0.0
+    },
+    {
+      "field": "gender",
+      "missing_count": 3,
+      "missing_rate": 0.0
+    }
+  ],
+  "model": {
+    "model_type": "Lightweight logistic regression baseline",
+    "target": "Readmission within 30 days",
+    "training_rows": 20000,
+    "test_rows": 5000,
+    "threshold": 0.16,
+    "accuracy": 0.876,
+    "precision": 0.292,
+    "recall": 0.071,
+    "f1": 0.114,
+    "auc": 0.613,
+    "confusion_matrix": {
+      "tp": 40,
+      "tn": 4339,
+      "fp": 97,
+      "fn": 524
+    },
+    "top_model_signals": [
+      {
+        "feature": "number_inpatient",
+        "weight": 2.203
+      },
+      {
+        "feature": "number_diagnoses",
+        "weight": 0.606
+      },
+      {
+        "feature": "diabetesMed_yes",
+        "weight": -0.38
+      },
+      {
+        "feature": "number_emergency",
+        "weight": 0.362
+      },
+      {
+        "feature": "age_midpoint",
+        "weight": 0.35
+      },
+      {
+        "feature": "time_in_hospital",
+        "weight": 0.297
+      },
+      {
+        "feature": "num_procedures",
+        "weight": -0.236
+      },
+      {
+        "feature": "insulin_Steady",
+        "weight": 0.234
+      },
+      {
+        "feature": "num_lab_procedures",
+        "weight": -0.209
+      },
+      {
+        "feature": "insulin_No",
+        "weight": -0.177
+      }
+    ]
+  }
+}
