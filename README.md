@@ -54,3 +54,9 @@ The project is designed for Healthcare Data Analyst, Clinical BI Analyst, Qualit
 ## Interview Pitch
 
 I built a healthcare analytics project using real inpatient diabetes encounter data from U.S. hospitals. I cleaned and profiled the data, created readmission KPIs, segmented patients by clinical and utilization factors, checked data quality issues, and built a baseline predictive model for 30-day readmission risk. The project demonstrates the kind of workflow I want to apply in healthcare data analyst and clinical BI roles: turning patient-level data into reliable reporting, quality insights, and predictive analytics.
+
+## Copyright and Use
+
+Copyright © 2026 Andi Wang. All rights reserved.
+
+This project is shared for portfolio review purposes only. No part of this project may be copied, reused, redistributed, or presented as another person's work without written permission.
