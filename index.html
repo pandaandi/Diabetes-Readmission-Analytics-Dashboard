@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -55,7 +55,7 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      gap: 8px;
     }
     .two {
       display: grid;
@@ -88,7 +88,7 @@
       display: grid;
       grid-template-columns: 180px 1fr 62px;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       padding: 7px 0;
       border-bottom: 1px solid #edf1f5;
     }
@@ -145,7 +145,62 @@
       gap: 10px;
       margin: 12px 0 16px;
     }
-    .model-box {
+    .prediction-layout {
+      display: grid;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .risk-card {
+      background: #f8fafc;
+      border: 1px solid #e4e9f0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .prediction-detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .prediction-explain,
+    .risk-signal-panel {
+      background: #ffffff;
+      border: 1px solid #e4e9f0;
+      border-radius: 8px;
+      padding: 16px;
+      height: 100%;
+    }
+    .prediction-explain h3,
+    .risk-signal-panel h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }    .risk-controls {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+    .risk-control {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.42fr) minmax(260px, 1.58fr) 38px;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid #e1e9f2;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 13px;
+      color: #26364a;
+    }
+    .risk-control input {
+      width: 100%;
+      accent-color: #2563eb;
+    }
+    .risk-control span {
+      text-align: right;
+      font-weight: 800;
+      color: #1d4ed8;
+      font-variant-numeric: tabular-nums;
+    }    .model-box {
       background: #f8fafc;
       border: 1px solid #e4e9f0;
       border-radius: 8px;
@@ -162,18 +217,19 @@
       font-size: 21px;
     }
     footer {
-      color: var(--muted);
-      font-size: 12px;
-      padding: 18px 0 4px;
-      border-top: 1px solid var(--line);
-      line-height: 1.6;
-    }
-
+  color: var(--muted);
+  font-size: 12px;
+  padding: 18px 0 4px;
+  border-top: 1px solid var(--line);
+  line-height: 1.65;
+  margin: 18px auto 0;
+  text-align: center;
+  max-width: 900px;
+}
     footer a {
       color: var(--blue);
       text-decoration: none;
     }
-
     footer a:hover {
       text-decoration: underline;
     }
@@ -194,7 +250,22 @@
       vertical-align: middle;
       background: #ffffff;
     }
-    .tip:hover::after {
+    .model-box .tip {
+      width: 16px;
+      height: 16px;
+      margin-left: 5px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      font-style: normal;
+      line-height: 1;
+      vertical-align: middle;
+      transform: translateY(-1px);
+    }    .tip:hover::after {
       content: attr(data-tip);
       position: absolute;
       left: 0;
@@ -212,7 +283,19 @@
       letter-spacing: 0;
       box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
     }
-    @media (max-width: 920px) {
+    @media (max-width: 760px) {
+      .prediction-detail {
+        grid-template-columns: 1fr;
+      }
+    }    @media (max-width: 620px) {
+      .risk-control {
+        grid-template-columns: 1fr 42px;
+      }
+      .risk-control input {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+    }    @media (max-width: 920px) {
       header, main { padding-left: 18px; padding-right: 18px; }
       .grid, .two, .model-grid { grid-template-columns: 1fr; }
       .bar-row { grid-template-columns: 130px 1fr 54px; }
@@ -407,42 +490,47 @@
     <section class="panel">
       <h2>Prediction Demo: 30-Day Readmission Risk <span class="tip" data-tip="This section estimates the chance that a patient encounter may be followed by readmission within 30 days.">?</span></h2>
       <div class="callout"><strong>What is being predicted?</strong> <span class="tip" data-tip="The target variable is readmitted <30, meaning the patient came back to the hospital in less than 30 days.">?</span> For each diabetes inpatient encounter, the model estimates whether the patient may be readmitted to the hospital within 30 days after discharge. This is a portfolio baseline model, not a clinical decision tool.</div>
-      <div style="display:grid;grid-template-columns:0.95fr 1.05fr;gap:16px;margin-top:14px;">
-        <div style="background:#f8fafc;border:1px solid #e4e9f0;border-radius:8px;padding:16px;">
+      <div class="prediction-layout">
+        <div class="risk-card">
           <h3 style="margin:0 0 8px;font-size:16px;">Try a Simple Risk Scenario</h3>
           <div style="color:#627083;font-size:13px;">Move the controls to see how patient utilization signals change the estimated risk.</div>
           <div style="font-size:44px;font-weight:800;margin:8px 0 2px;color:#2563eb;" id="riskPct">--%</div>
           <div id="riskBand" style="display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;background:#e0f2fe;color:#075985;">Risk band</div>
-          <div style="margin-top:14px;">
-            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Prior inpatient visits <input id="inpatientCtrl" type="range" min="0" max="10" value="1"><span id="inpatientVal">1</span></label>
-            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Emergency visits <input id="emergencyCtrl" type="range" min="0" max="10" value="0"><span id="emergencyVal">0</span></label>
-            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Number of diagnoses <input id="diagnosesCtrl" type="range" min="1" max="16" value="6"><span id="diagnosesVal">6</span></label>
-            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Length of stay <input id="losCtrl" type="range" min="1" max="14" value="4"><span id="losVal">4</span></label>
-            <label style="display:grid;grid-template-columns:155px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:13px;">Age midpoint <input id="ageCtrl" type="range" min="10" max="95" value="65"><span id="ageVal">65</span></label>
+          <div class="risk-controls">
+            <label class="risk-control">Prior inpatient visits <input id="inpatientCtrl" type="range" min="0" max="10" value="1"><span id="inpatientVal">1</span></label>
+            <label class="risk-control">Emergency visits <input id="emergencyCtrl" type="range" min="0" max="10" value="0"><span id="emergencyVal">0</span></label>
+            <label class="risk-control">Number of diagnoses <input id="diagnosesCtrl" type="range" min="1" max="16" value="6"><span id="diagnosesVal">6</span></label>
+            <label class="risk-control">Length of stay <input id="losCtrl" type="range" min="1" max="14" value="4"><span id="losVal">4</span></label>
+            <label class="risk-control">Age midpoint <input id="ageCtrl" type="range" min="10" max="95" value="65"><span id="ageVal">65</span></label>
           </div>
         </div>
-        <div>
-          <h3 style="margin:0 0 8px;font-size:16px;">Where the prediction appears in this dashboard</h3>
+        <div class="prediction-detail">
+          <div class="prediction-explain">
+          <h3>Where the prediction appears in this dashboard</h3>
           <ul style="margin:8px 0 14px;padding-left:18px;color:#334155;font-size:14px;line-height:1.55;">
             <li><strong>Target:</strong> readmitted within 30 days, shown as the prediction outcome.</li>
             <li><strong>Model metrics:</strong> AUC, precision, recall, and F1 summarize prediction performance.</li>
             <li><strong>Model signals:</strong> prior inpatient visits, number of diagnoses, emergency visits, age, and length of stay are examples of features that move risk up or down.</li>
           </ul>
           <div class="model-grid">
-            <div class="model-box"><span>AUC <span class="tip" data-tip="AUC measures how well the model separates readmitted vs not-readmitted cases. 0.5 is random; 1.0 is perfect.">?</span></span><strong>0.613</strong></div>
-            <div class="model-box"><span>Accuracy <span class="tip" data-tip="Share of correct predictions overall. It can look high when the positive event is uncommon, so it should not be read alone.">?</span></span><strong>0.876</strong></div>
-            <div class="model-box"><span>Precision <span class="tip" data-tip="Of the cases the model flagged as high risk, this is the share that actually had a 30-day readmission.">?</span></span><strong>0.292</strong></div>
-            <div class="model-box"><span>Recall <span class="tip" data-tip="Of all actual 30-day readmissions, this is the share the model successfully caught.">?</span></span><strong>0.071</strong></div>
-            <div class="model-box"><span>F1 <span class="tip" data-tip="A combined score balancing precision and recall. Useful when the positive event is relatively rare.">?</span></span><strong>0.114</strong></div>
+            <div class="model-box"><span>AUC <span class="tip" data-tip="AUC measures how well the model separates readmitted vs not-readmitted cases. 0.5 is random; 1.0 is perfect.">i</span></span><strong>0.613</strong></div>
+            <div class="model-box"><span>Accuracy <span class="tip" data-tip="Share of correct predictions overall. It can look high when the positive event is uncommon, so it should not be read alone.">i</span></span><strong>0.876</strong></div>
+            <div class="model-box"><span>Precision <span class="tip" data-tip="Of the cases the model flagged as high risk, this is the share that actually had a 30-day readmission.">i</span></span><strong>0.292</strong></div>
+            <div class="model-box"><span>Recall <span class="tip" data-tip="Of all actual 30-day readmissions, this is the share the model successfully caught.">i</span></span><strong>0.071</strong></div>
+            <div class="model-box"><span>F1 <span class="tip" data-tip="A combined score balancing precision and recall. Useful when the positive event is relatively rare.">i</span></span><strong>0.114</strong></div>
           </div>
+          </div>
+          <div class="risk-signal-panel">
+          <h3>Top Risk Signals</h3>
           <table>
-            <thead><tr><th>Top Risk Signal <span class="tip" data-tip="A feature used by the model to estimate readmission risk.">?</span></th><th>Weight <span class="tip" data-tip="Positive weights push estimated risk higher; negative weights push it lower. Larger absolute values have stronger impact.">?</span></th><th>Plain-English Meaning</th></tr></thead>
+            <thead><tr><th>Risk Signal <span class="tip" data-tip="A feature used by the model to estimate readmission risk.">?</span></th><th>Weight <span class="tip" data-tip="Positive weights push estimated risk higher; negative weights push it lower. Larger absolute values have stronger impact.">?</span></th><th>Plain-English Meaning</th></tr></thead>
             <tbody><tr><td>Prior inpatient visits</td><td>2.203</td><td>More recent inpatient history pushes risk higher.</td></tr>
 <tr><td>Number of diagnoses</td><td>0.606</td><td>More documented conditions can indicate higher complexity.</td></tr>
 <tr><td>Emergency visits</td><td>0.362</td><td>More emergency utilization pushes risk higher.</td></tr>
 <tr><td>Age midpoint</td><td>0.350</td><td>Older age groups trend toward higher risk in this baseline.</td></tr>
 <tr><td>Length of stay</td><td>0.297</td><td>Longer stays can signal greater clinical complexity.</td></tr></tbody>
           </table>
+          </div>
         </div>
       </div>
     </section>
@@ -462,11 +550,13 @@
         <p>This project demonstrates the full healthcare analytics workflow: data profiling, KPI design, cohort segmentation, dashboard reporting, data quality review, and a predictive modeling baseline.</p>
         <p>It is designed for Healthcare Data Analyst, Clinical BI Analyst, Quality Reporting Analyst, and entry-level Population Health Analytics applications.</p>
       </div>
-    </section>
-
-    <footer>
-      <strong>Created by Andi Wang</strong> · Healthcare Data Analytics Portfolio<br>Email: <a href="mailto:andywong1012@outlook.com">andywong1012@outlook.com</a> · GitHub: <a href="https://github.com/pandaandi" target="_blank">github.com/pandaandi</a><br>
-      Data source: UCI Machine Learning Repository - Diabetes 130-US Hospitals for Years 1999-2008. Dataset page: <a href="https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008">https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008</a>. License: Creative Commons Attribution 4.0 International (CC BY 4.0). This dashboard is for analytics portfolio demonstration only and is not a clinical decision-support tool.
+    </section>    <footer>
+      <strong>Created by Andi Wang</strong> &middot; Healthcare Data Analytics Portfolio<br>
+      &copy; 2026 Andi Wang. All rights reserved.<br>
+      Email: <a href="mailto:andywong1012@outlook.com">andywong1012@outlook.com</a> &middot; LinkedIn: <a href="https://www.linkedin.com/in/andi-wang-panda/" target="_blank">Andi W.</a> &middot; GitHub: <a href="https://github.com/pandaandi" target="_blank">Andi+=Panda</a><br>
+      Data source: UCI Machine Learning Repository - Diabetes 130-US Hospitals for Years 1999-2008.<br>
+      This dashboard is for portfolio review purposes only. No part may be copied, reused, redistributed, or presented as another person's work without written permission.<br>
+      It is not a clinical, regulatory, reimbursement, coverage, or investment recommendation.
     </footer>
   </main>
 <script>
@@ -499,5 +589,17 @@
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
